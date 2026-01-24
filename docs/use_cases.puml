@@ -1,0 +1,59 @@
+@startuml use_cases
+!theme plain
+skinparam packageStyle rectangle
+
+title AIUP Task Manager - Use Case Diagram
+
+left to right direction
+
+actor "Team Member" as TeamMember
+actor "Team Lead" as TeamLead
+actor "Administrator" as Admin
+
+rectangle "AIUP Task Manager" {
+
+  package "Task Management" {
+    usecase "UC-001\nCreate Task" as UC001
+    usecase "UC-002\nUpdate Task Details" as UC002
+    usecase "UC-003\nComplete Task" as UC003
+    usecase "UC-004\nDelete Task" as UC004
+    usecase "UC-005\nView Assigned Tasks" as UC005
+    usecase "UC-006\nView Team Tasks" as UC006
+    usecase "UC-007\nFilter Tasks" as UC007
+    usecase "UC-008\nAssign Task" as UC008
+  }
+
+  package "Team Management" {
+    usecase "UC-009\nCreate Team" as UC009
+    usecase "UC-010\nManage Team\nMembership" as UC010
+  }
+
+  package "User Management" {
+    usecase "UC-011\nManage Users" as UC011
+  }
+
+  package "Audit & Reporting" {
+    usecase "UC-012\nView Task History" as UC012
+  }
+}
+
+' Team Member relationships
+TeamMember --> UC001
+TeamMember --> UC002
+TeamMember --> UC003
+TeamMember --> UC005
+TeamMember --> UC006
+TeamMember --> UC007
+
+' Team Lead relationships (inherits from Team Member)
+TeamLead --|> TeamMember
+TeamLead --> UC004
+TeamLead --> UC008
+TeamLead --> UC012
+
+' Administrator relationships
+Admin --> UC009
+Admin --> UC010
+Admin --> UC011
+
+@enduml
