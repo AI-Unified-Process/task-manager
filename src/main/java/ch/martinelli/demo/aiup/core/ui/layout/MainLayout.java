@@ -2,6 +2,7 @@ package ch.martinelli.demo.aiup.core.ui.layout;
 
 import ch.martinelli.demo.aiup.core.security.SecurityContext;
 import ch.martinelli.demo.aiup.core.ui.UserView;
+import ch.martinelli.demo.aiup.task.ui.TaskView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -59,7 +60,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 	}
 
 	private void addDrawerContent() {
-		var appName = new Div("Vaadin jOOQ Template");
+		var appName = new Div("Task Manager");
 		appName.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.FontWeight.BLACK, LumoUtility.Margin.MEDIUM);
 
 		var header = new Header(appName);
@@ -72,8 +73,12 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 	private SideNav createNavigation() {
 		var nav = new SideNav();
 
+		if (accessAnnotationChecker.hasAccess(TaskView.class)) {
+			nav.addItem(new SideNavItem(getTranslation("task.title"), TaskView.class, VaadinIcon.TASKS.create()));
+		}
+
 		if (accessAnnotationChecker.hasAccess(UserView.class)) {
-			nav.addItem(new SideNavItem(getTranslation("Users"), UserView.class, VaadinIcon.USER.create()));
+			nav.addItem(new SideNavItem(getTranslation("user.title"), UserView.class, VaadinIcon.USER.create()));
 		}
 
 		return nav;
@@ -123,12 +128,12 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 			div.add(LumoIcon.DROPDOWN.create());
 			div.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Gap.SMALL);
 			userName.add(div);
-			userName.getSubMenu().addItem(getTranslation("Sign out"), _ -> securityContext.logout());
+			userName.getSubMenu().addItem(getTranslation("mainLayout.signOut"), _ -> securityContext.logout());
 
 			verticalLayout.add(userMenu);
 		}
 		else {
-			var loginLink = new Anchor("login", getTranslation("Sign in"));
+			var loginLink = new Anchor("login", getTranslation("login.signIn"));
 			verticalLayout.add(loginLink);
 		}
 

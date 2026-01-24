@@ -24,7 +24,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
 		var i18n = LoginI18n.createDefault();
 		i18n.setHeader(new LoginI18n.Header());
-		i18n.getHeader().setTitle("Vaadin jOOQ Template");
+		i18n.getHeader().setTitle("Task Manager");
 		i18n.getHeader().setDescription("Login using user/user or admin/admin");
 		i18n.setAdditionalInformation(null);
 		setI18n(i18n);
