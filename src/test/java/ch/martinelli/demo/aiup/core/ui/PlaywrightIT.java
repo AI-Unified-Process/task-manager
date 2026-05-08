@@ -1,6 +1,7 @@
 package ch.martinelli.demo.aiup.core.ui;
 
 import ch.martinelli.demo.aiup.TestcontainersConfiguration;
+import ch.martinelli.demo.aiup.core.ui.po.LoginPO;
 import com.microsoft.playwright.*;
 import in.virit.mopo.Mopo;
 import org.junit.jupiter.api.AfterAll;
@@ -34,7 +35,7 @@ public abstract class PlaywrightIT {
 		BrowserType browserType = playwright.chromium();
 		BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
 		// set to false if you want to see the browser during development
-		launchOptions.headless = true;
+		launchOptions.headless = false;
 		browser = browserType.launch(launchOptions);
 	}
 
@@ -55,6 +56,42 @@ public abstract class PlaywrightIT {
 	void tearDown() {
 		page.close();
 		browserContext.close();
+	}
+
+	protected void login(String username, String password) {
+		// Navigate to the login view
+		page.navigate("http://localhost:" + localServerPort + "/login");
+
+		// Wait for the login page to load
+		page.waitForLoadState();
+
+		// Login with provided username and password
+		var loginPO = new LoginPO(page);
+		loginPO.login(username, password);
+
+		// Wait for navigation after login
+		page.waitForLoadState();
+
+		// Wait for Vaadin client-server connection to settle
+		mopo.waitForConnectionToSettle();
+	}
+
+	/**
+	 * Wait for Vaadin client-server connection to settle. This is more reliable than
+	 * arbitrary timeouts.
+	 */
+	protected void waitForVaadin() {
+		mopo.waitForConnectionToSettle();
+	}
+
+	/**
+	 * Logout by clearing browser cookies and navigating to the login page. This is more
+	 * reliable than navigating to /logout which requires a POST request.
+	 */
+	protected void logout() {
+		browserContext.clearCookies();
+		page.navigate("http://localhost:" + localServerPort + "/login");
+		page.waitForLoadState();
 	}
 
 }
