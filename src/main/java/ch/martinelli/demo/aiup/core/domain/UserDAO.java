@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static ch.martinelli.demo.aiup.db.tables.TeamMembership.TEAM_MEMBERSHIP;
 import static ch.martinelli.demo.aiup.db.tables.User.USER;
 import static ch.martinelli.demo.aiup.db.tables.UserRole.USER_ROLE;
 import static org.jooq.Records.mapping;
@@ -71,6 +72,7 @@ public class UserDAO extends JooqDAO<User, UserRecord, String> {
 
 	@Transactional
 	public void deleteUserAndRolesByUsername(String username) {
+		dslContext.deleteFrom(TEAM_MEMBERSHIP).where(TEAM_MEMBERSHIP.USERNAME.eq(username)).execute();
 		dslContext.deleteFrom(USER_ROLE).where(USER_ROLE.USERNAME.eq(username)).execute();
 		dslContext.deleteFrom(USER).where(USER.USERNAME.eq(username)).execute();
 	}

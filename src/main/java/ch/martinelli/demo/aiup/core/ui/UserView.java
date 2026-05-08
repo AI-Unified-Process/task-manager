@@ -50,7 +50,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
 	private final Binder<UserWithRoles> binder = new Binder<>();
 
-	private final TextField usernameField = new TextField(getTranslation("users.username"));
+	private final TextField usernameField = new TextField(getTranslation("user.username"));
 
 	@Nullable private transient UserWithRoles user;
 

@@ -33,7 +33,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 	void check_grid_size() {
 		@SuppressWarnings("unchecked")
 		Grid<UserWithRoles> grid = $(Grid.class).single();
-		assertThat(test(grid).size()).isEqualTo(2);
+		assertThat(test(grid).size()).isEqualTo(4);
 	}
 
 	@Test
@@ -42,7 +42,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 
 		@SuppressWarnings("unchecked")
 		Grid<UserWithRoles> grid = $(Grid.class).single();
-		assertThat(test(grid).size()).isEqualTo(2);
+		assertThat(test(grid).size()).isEqualTo(4);
 
 		Set<UserWithRoles> selectedItems = grid.getSelectedItems();
 		assertThat(selectedItems).hasSize(1)
@@ -58,16 +58,38 @@ class UserViewTest extends AbstractBrowserlessTest {
 	void delete_person() {
 		@SuppressWarnings("unchecked")
 		Grid<UserWithRoles> grid = $(Grid.class).single();
-		assertThat(test(grid).size()).isEqualTo(2);
+		var initialSize = test(grid).size();
 
-		var component = test(grid).getCellComponent(0, "actions");
+		clickFirstSvgIcon();
+
+		var usernameField = $(TextField.class).withCaption("Username").single();
+		var firstNameField = $(TextField.class).withCaption("First Name").single();
+		var lastNameField = $(TextField.class).withCaption("Last Name").single();
+		var passwordField = $(PasswordField.class).withCaption("Password").single();
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		MultiSelectComboBox roleMultiSelect = $(MultiSelectComboBox.class).withCaption("Roles").single();
+
+		usernameField.setValue("tempuser");
+		firstNameField.setValue("Temp");
+		lastNameField.setValue("User");
+		passwordField.setValue("password123");
+		roleMultiSelect.setValue(Set.of(Role.USER));
+
+		var saveButton = $(Button.class).withCaption("Save").single();
+		test(saveButton).click();
+
+		assertThat(test(grid).size()).isEqualTo(initialSize + 1);
+
+		// Grid is sorted by username: admin, noTeam, singleTeamUser, tempuser, user
+		// So 'tempuser' is at index 3
+		var component = test(grid).getCellComponent(3, "actions");
 		assertThat(component).isInstanceOf(SvgIcon.class);
 		ComponentUtil.fireEvent(component, new ClickEvent<>(component));
 
 		var confirmDialog = $(ConfirmDialog.class).single();
 		test(confirmDialog).confirm();
 
-		assertThat(test(grid).size()).isEqualTo(1);
+		assertThat(test(grid).size()).isEqualTo(initialSize);
 	}
 
 	@Test
@@ -76,7 +98,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 		Grid<UserWithRoles> grid = $(Grid.class).single();
 		var initialSize = test(grid).size();
 
-		clickAddIcon(grid);
+		clickFirstSvgIcon();
 
 		var usernameField = $(TextField.class).withCaption("Username").single();
 		var firstNameField = $(TextField.class).withCaption("First Name").single();
@@ -118,9 +140,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 
 	@Test
 	void save_validation_fails_for_empty_required_fields() {
-		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
-		clickAddIcon(grid);
+		clickFirstSvgIcon();
 
 		var saveButton = $(Button.class).withCaption("Save").single();
 		test(saveButton).click();
@@ -138,9 +158,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 
 	@Test
 	void cancel_button_clears_form_and_refreshes_grid() {
-		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
-		clickAddIcon(grid);
+		clickFirstSvgIcon();
 
 		var usernameField = $(TextField.class).withCaption("Username").single();
 		var firstNameField = $(TextField.class).withCaption("First Name").single();
@@ -156,7 +174,9 @@ class UserViewTest extends AbstractBrowserlessTest {
 		assertThat(usernameField.isReadOnly()).isFalse();
 	}
 
-	private void clickAddIcon(Grid<UserWithRoles> grid) {
+	private void clickFirstSvgIcon() {
+		@SuppressWarnings("unchecked")
+		Grid<UserWithRoles> grid = $(Grid.class).single();
 		var icon = (SvgIcon) grid.getColumnByKey("actions").getHeaderComponent();
 		ComponentUtil.fireEvent(icon, new ClickEvent<>(icon));
 	}
