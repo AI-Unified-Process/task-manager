@@ -4,3 +4,9 @@ target
 
 src/main/frontend/generated
 src/main/frontend/index.html
+
+# Eclipse / m2e
+.classpath
+.project
+.settings/
+.mvn/
