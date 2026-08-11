@@ -67,6 +67,14 @@ aiup-task-manager
 
 This workflow is explained step by step in the book.
 
+## Upgrade Notes
+
+Vaadin Browserless Testing 1.1 deprecated the `$(Component.class)` query method in favor of
+`find(Component.class)` (removal planned for 2.0). All browserless tests in this repository use
+`find(...)` accordingly. If you see `$(...)` in the book or in older snapshots of this repository,
+read it as `find(...)`. In addition, `SpringBrowserlessTest` moved to its own artifact,
+`com.vaadin:browserless-test-spring`, which is declared as a test dependency in `pom.xml`.
+
 ## What This Project Is Not
 
 * Not a production-ready task manager

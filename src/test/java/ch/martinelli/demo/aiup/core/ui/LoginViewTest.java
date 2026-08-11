@@ -12,7 +12,7 @@ class LoginViewTest extends AbstractBrowserlessTest {
 	void navigate_to_login() {
 		navigate(LoginView.class);
 
-		var title = $(H2.class).withText("Login").single();
+		var title = find(H2.class).withText("Login").single();
 		Assertions.assertThat(title).isNotNull();
 	}
 
