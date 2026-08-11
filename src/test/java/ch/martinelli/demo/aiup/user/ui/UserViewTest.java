@@ -32,7 +32,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 	@Test
 	void check_grid_size() {
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		assertThat(test(grid).size()).isEqualTo(2);
 	}
 
@@ -41,7 +41,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 		navigate(UserView.class, "admin");
 
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		assertThat(test(grid).size()).isEqualTo(2);
 
 		Set<UserWithRoles> selectedItems = grid.getSelectedItems();
@@ -50,21 +50,21 @@ class UserViewTest extends AbstractBrowserlessTest {
 			.extracting(userWithRoles -> userWithRoles.getUser().getFirstName())
 			.isEqualTo("Emma");
 
-		var firstNameTextField = $(TextField.class).withCaption("First Name").single();
+		var firstNameTextField = find(TextField.class).withCaption("First Name").single();
 		assertThat(firstNameTextField.getValue()).isEqualTo("Emma");
 	}
 
 	@Test
 	void delete_person() {
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		assertThat(test(grid).size()).isEqualTo(2);
 
 		var component = test(grid).getCellComponent(0, "actions");
 		assertThat(component).isInstanceOf(SvgIcon.class);
 		ComponentUtil.fireEvent(component, new ClickEvent<>(component));
 
-		var confirmDialog = $(ConfirmDialog.class).single();
+		var confirmDialog = find(ConfirmDialog.class).single();
 		test(confirmDialog).confirm();
 
 		assertThat(test(grid).size()).isEqualTo(1);
@@ -73,17 +73,17 @@ class UserViewTest extends AbstractBrowserlessTest {
 	@Test
 	void save_new_user() {
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		var initialSize = test(grid).size();
 
 		clickAddIcon(grid);
 
-		var usernameField = $(TextField.class).withCaption("Username").single();
-		var firstNameField = $(TextField.class).withCaption("First Name").single();
-		var lastNameField = $(TextField.class).withCaption("Last Name").single();
-		var passwordField = $(PasswordField.class).withCaption("Password").single();
+		var usernameField = find(TextField.class).withCaption("Username").single();
+		var firstNameField = find(TextField.class).withCaption("First Name").single();
+		var lastNameField = find(TextField.class).withCaption("Last Name").single();
+		var passwordField = find(PasswordField.class).withCaption("Password").single();
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		MultiSelectComboBox roleMultiSelect = $(MultiSelectComboBox.class).withCaption("Roles").single();
+		MultiSelectComboBox roleMultiSelect = find(MultiSelectComboBox.class).withCaption("Roles").single();
 
 		usernameField.setValue("testuser");
 		firstNameField.setValue("Test");
@@ -91,7 +91,7 @@ class UserViewTest extends AbstractBrowserlessTest {
 		passwordField.setValue("password123");
 		roleMultiSelect.setValue(Set.of(Role.USER));
 
-		var saveButton = $(Button.class).withCaption("Save").single();
+		var saveButton = find(Button.class).withCaption("Save").single();
 		test(saveButton).click();
 
 		assertThat(test(grid).size()).isEqualTo(initialSize + 1);
@@ -101,34 +101,34 @@ class UserViewTest extends AbstractBrowserlessTest {
 	void save_existing_user() {
 		navigate(UserView.class, "user");
 
-		var firstNameField = $(TextField.class).withCaption("First Name").single();
-		var passwordField = $(PasswordField.class).withCaption("Password").single();
+		var firstNameField = find(TextField.class).withCaption("First Name").single();
+		var passwordField = find(PasswordField.class).withCaption("Password").single();
 		test(passwordField).setValue("password");
 
 		var updatedFirstName = "UpdatedJohn";
 		firstNameField.setValue(updatedFirstName);
 
-		var saveButton = $(Button.class).withCaption("Save").single();
+		var saveButton = find(Button.class).withCaption("Save").single();
 		test(saveButton).click();
 
 		navigate(UserView.class, "user");
-		var updatedFirstNameField = $(TextField.class).withCaption("First Name").single();
+		var updatedFirstNameField = find(TextField.class).withCaption("First Name").single();
 		assertThat(updatedFirstNameField.getValue()).isEqualTo(updatedFirstName);
 	}
 
 	@Test
 	void save_validation_fails_for_empty_required_fields() {
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		clickAddIcon(grid);
 
-		var saveButton = $(Button.class).withCaption("Save").single();
+		var saveButton = find(Button.class).withCaption("Save").single();
 		test(saveButton).click();
 
-		var usernameField = $(TextField.class).withCaption("Username").single();
-		var firstNameField = $(TextField.class).withCaption("First Name").single();
-		var lastNameField = $(TextField.class).withCaption("Last Name").single();
-		var passwordField = $(PasswordField.class).withCaption("Password").single();
+		var usernameField = find(TextField.class).withCaption("Username").single();
+		var firstNameField = find(TextField.class).withCaption("First Name").single();
+		var lastNameField = find(TextField.class).withCaption("Last Name").single();
+		var passwordField = find(PasswordField.class).withCaption("Password").single();
 
 		assertThat(usernameField.isInvalid()).isTrue();
 		assertThat(firstNameField.isInvalid()).isTrue();
@@ -139,16 +139,16 @@ class UserViewTest extends AbstractBrowserlessTest {
 	@Test
 	void cancel_button_clears_form_and_refreshes_grid() {
 		@SuppressWarnings("unchecked")
-		Grid<UserWithRoles> grid = $(Grid.class).single();
+		Grid<UserWithRoles> grid = find(Grid.class).single();
 		clickAddIcon(grid);
 
-		var usernameField = $(TextField.class).withCaption("Username").single();
-		var firstNameField = $(TextField.class).withCaption("First Name").single();
+		var usernameField = find(TextField.class).withCaption("Username").single();
+		var firstNameField = find(TextField.class).withCaption("First Name").single();
 
 		usernameField.setValue("testuser");
 		firstNameField.setValue("Test");
 
-		var cancelButton = $(Button.class).withCaption("Cancel").single();
+		var cancelButton = find(Button.class).withCaption("Cancel").single();
 		test(cancelButton).click();
 
 		assertThat(usernameField.getValue()).isEmpty();
