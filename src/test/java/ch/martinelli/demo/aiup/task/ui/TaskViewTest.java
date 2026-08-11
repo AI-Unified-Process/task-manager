@@ -38,7 +38,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		ComboBox<Team> teamSelector = $(ComboBox.class).withCaption("Team").single();
+		ComboBox<Team> teamSelector = find(ComboBox.class).withCaption("Team").single();
 		assertSoftly(softly -> {
 			softly.assertThat(teamSelector.getValue()).isNotNull();
 			softly.assertThat(teamSelector.getValue().name()).isEqualTo("Development Team");
@@ -46,7 +46,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		});
 
 		@SuppressWarnings("unchecked")
-		Grid<Task> grid = $(Grid.class).single();
+		Grid<Task> grid = find(Grid.class).single();
 		assertThat(test(grid).size()).isEqualTo(3);
 
 		assertThat(grid.getColumns()).hasSize(6);
@@ -75,7 +75,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		ComboBox<Team> teamSelector = $(ComboBox.class).withCaption("Team").single();
+		ComboBox<Team> teamSelector = find(ComboBox.class).withCaption("Team").single();
 		assertThat(teamSelector.isReadOnly()).isFalse();
 
 		assertThat(teamSelector.getValue()).isNotNull();
@@ -83,7 +83,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		assertThat(initialTeam.name()).isIn("Development Team", "QA Team");
 
 		@SuppressWarnings("unchecked")
-		Grid<Task> grid = $(Grid.class).single();
+		Grid<Task> grid = find(Grid.class).single();
 		var initialSize = test(grid).size();
 		assertThat(initialSize).isGreaterThan(0);
 
@@ -114,18 +114,18 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		ComboBox<Team> teamSelector = $(ComboBox.class).withCaption("Team").single();
+		ComboBox<Team> teamSelector = find(ComboBox.class).withCaption("Team").single();
 
 		var emptyTeam = new Team(3L, "Empty Team", "Team with no tasks", LocalDateTime.now(), true);
 		teamSelector.setValue(emptyTeam);
 
-		var emptyStateMessage = $(Span.class).single();
+		var emptyStateMessage = find(Span.class).single();
 		assertSoftly(softly -> {
 			softly.assertThat(emptyStateMessage.isVisible()).isTrue();
 			softly.assertThat(emptyStateMessage.getText()).isEqualTo("No tasks found for this team.");
 		});
 
-		var taskView = $(TaskView.class).single();
+		var taskView = find(TaskView.class).single();
 		var layout = (VerticalLayout) taskView.getChildren().findFirst().orElseThrow();
 		Grid<?> grid = (Grid<?>) layout.getChildren()
 			.filter(Grid.class::isInstance)
@@ -142,14 +142,14 @@ class TaskViewTest extends AbstractBrowserlessTest {
 	void displays_message_when_user_not_member_of_any_team() {
 		navigate(TaskView.class);
 
-		var emptyStateMessage = $(Span.class).single();
+		var emptyStateMessage = find(Span.class).single();
 		assertSoftly(softly -> {
 			softly.assertThat(emptyStateMessage.isVisible()).isTrue();
 			softly.assertThat(emptyStateMessage.getText())
 				.isEqualTo("You are not a member of any team. Contact your administrator.");
 		});
 
-		var taskView = $(TaskView.class).single();
+		var taskView = find(TaskView.class).single();
 		var layout = (VerticalLayout) taskView.getChildren().findFirst().orElseThrow();
 		ComboBox<?> teamSelector = (ComboBox<?>) layout.getChildren()
 			.filter(ComboBox.class::isInstance)
@@ -170,7 +170,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		Grid<Task> grid = $(Grid.class).single();
+		Grid<Task> grid = find(Grid.class).single();
 
 		var columns = grid.getColumns();
 		assertThat(columns).hasSizeGreaterThanOrEqualTo(5);
@@ -187,7 +187,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		Grid<Task> grid = $(Grid.class).single();
+		Grid<Task> grid = find(Grid.class).single();
 		var size = test(grid).size();
 
 		long assignedToOthers = 0;
@@ -219,7 +219,7 @@ class TaskViewTest extends AbstractBrowserlessTest {
 		navigate(TaskView.class);
 
 		@SuppressWarnings("unchecked")
-		Grid<Task> grid = $(Grid.class).single();
+		Grid<Task> grid = find(Grid.class).single();
 		var size = test(grid).size();
 
 		assertThat(size).isGreaterThan(0);
