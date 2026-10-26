@@ -2,10 +2,10 @@
 
 ## Overview
 
-**Use Case ID:** UC-006   
-**Use Case Name:** View Team Tasks   
-**Primary Actor:** Team Member   
-**Goal:** View all tasks belonging to a team to understand the team's workload   
+**Use Case ID:** UC-006  
+**Use Case Name:** View Team Tasks  
+**Primary Actor:** Team Member  
+**Goal:** View all tasks belonging to a team to understand the team's workload  
 **Status:** Documented
 
 ## Preconditions
@@ -26,14 +26,14 @@
 
 ### A1: No Tasks in Team
 
-**Trigger:** Selected team has no tasks (step 5)
+**Trigger:** Selected team has no tasks (step 5)  
 **Flow:**
 
 - System displays empty state message: "No tasks found for this team."
 
 ### A2: User Not Member of Any Team
 
-**Trigger:** User is not a member of any team (step 2)
+**Trigger:** User is not a member of any team (step 2)  
 **Flow:**
 
 - System displays message: "You are not a member of any team. Contact your administrator."
